@@ -9,23 +9,22 @@ app.use(express.static('client'));
 app.use(bodyParser.urlencoded());
 
 async function graphQLHandler(req, res){
-  console.log('req.body!!',req.body);
   const {query, variables = {}} = req.body;
   console.log(query);
   console.log(variables);
   const result = await graphql(
     Schema,
     query,
-    {db: req.db},
+    {},
     variables
   );
-  //console.log('server.js: gqlhandler, result: ', result);
   res.send(result);
 }
 
-app.post('/', (req,res)=>{
-  graphQLHandler(req,res);
-});
+app.post('/', graphQLHandler);
+// var Sandal = require('sandle');
+// var cb = Sandal(Schema, uri); // => function(req, res) { }
+// app.post('/',cb);
 
 app.listen(process.env.PORT || 3000, function(){
   console.log("Server is listening on port 3000.");
